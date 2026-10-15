@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{url}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -48,7 +49,7 @@ Surabaya, Indonesia \\
 \maketitle
 
 \begin{abstract}
-Generative AI coding assistants are now widely used in software development, yet their effect on how well developers understand code remains unclear. This paper presents a systematic literature review of primary empirical studies published between 2021 and 2026 in which human developers used large language model based coding assistants for realistic development or maintenance tasks, and in which code comprehension was measured directly or through close proxies such as cognitive load. Following the guidelines of Kitchenham and Charters, we searched Scopus, IEEE Xplore, and ScienceDirect, screened records against predefined inclusion and exclusion criteria, assessed study quality, and extracted data to answer four research questions: how assistants affect comprehension, which assistants and forms of comprehension support have been studied, how comprehension has been measured, and which challenges limit it. Twenty-four studies published between 2024 and 2026 met the criteria and all passed quality assessment. Effects on comprehension were reported as positive in 15 studies and mixed in 8, and one study did not compare AI use against no AI use. The clearest gains came from purpose-built tools, such as anchored explanations, visual aids, and validation support, evaluated in small controlled studies, whereas a practitioner experiment with general-purpose AI found lower accuracy on code with structural issues. Comprehension was measured directly in 8 studies and otherwise through proxies such as cognitive load, task performance, or perceived understanding. The most frequently reported challenges were inaccurate or untrusted output, missing context, effort in formulating prompts, and over-reliance that can lead to shallow understanding. The review also discusses implications for tool designers, practitioners, and future empirical studies.
+\todo{Write the abstract last, after the final study selection, synthesis, discussion, and conclusions are verified.}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -91,10 +92,43 @@ The remainder of this paper is organized as follows. Section~\ref{sec:method} de
 %% PLACEHOLDER SECTIONS (replace with the next chapters)
 %% ====================================================================
 \section{Methodology}\label{sec:method}
-\todo{To be written.}
+
+This systematic literature review (SLR) was designed using the evidence-based software engineering approach of Kitchenham and Charters \cite{kitchenham2007}, with reporting informed by SEGRESS \cite{segress2023}, PRISMA 2020 \cite{page2021}, and PRISMA-S \cite{prismaS2021}. A predefined protocol specified the research questions in Section~\ref{sec:intro}, eligibility criteria, search sources, quality appraisal, and planned synthesis. The PICOC framework delimited human developers (including advanced students performing realistic engineering tasks), interactive GenAI coding assistance, optional comparator conditions, developer code comprehension as the outcome, and software development or maintenance as the context. Departures from the planned search were recorded in a protocol-change log.
+
+\subsection{Search Strategy}
+Scopus, IEEE Xplore, and ScienceDirect were searched on 17 September 2026 for peer-reviewed journal and conference studies published from 2021 onward, with 2026 as the upper publication-year limit and English as the language limit. Search terms combined three concepts with Boolean AND: GenAI or LLM-based coding assistance; code comprehension and related outcomes; and programming or software. Synonyms and selected assistant names within each concept were joined by OR. Scopus used \texttt{TITLE-ABS-KEY}; IEEE Xplore used \texttt{All Metadata}; and ScienceDirect used the title, abstract, or author-specified keywords field. ScienceDirect required five narrower query variants. One complete executed ScienceDirect query (SD-S1) was:
+
+\begin{quote}
+\footnotesize\raggedright
+\texttt{("generative AI" OR "large language model" OR LLM)}\\
+\texttt{AND (comprehension OR "code understanding")}\\
+\texttt{AND (code OR software)}
+\end{quote}
+
+The database-specific syntax, search dates, filters, and all five ScienceDirect strings are archived in the supplementary search log. The Scopus result export was further restricted to articles and conference papers in English; records outside the protocol's 2021--2026 year window were removed before merging. IEEE Xplore was filtered to conferences and journals within 2021--2026; ScienceDirect was filtered to research articles, English, and 2021--2026. The planned ACM Digital Library search was not performed because access was unavailable. A preliminary overly broad comprehension query was refined for precision; both this change and the ACM omission were recorded with their possible recall implications. The search date limits actual coverage: the study does not claim to include publications appearing after 17 September 2026.
+
+\subsection{Study Selection}
+Seven predefined inclusion criteria (IC1--IC7) required empirical primary studies involving human programmers using GenAI coding assistance in realistic development or maintenance tasks, with directly measured code comprehension or a defensible close proxy, peer-reviewed publication, and usable English full text. Eight exclusion criteria (EC1--EC8) covered model-only evaluations, productivity-only or code-quality-only studies without comprehension outcomes, introductory exercises that did not represent realistic software engineering, secondary or non-peer-reviewed reports, tools unrelated to GenAI assistance, unavailable usable full text, and duplicate publications without additional evidence. An author-posted manuscript was used as full text only when linked to an independently identifiable peer-reviewed version.
+
+Database exports were mapped into a common metadata schema with source provenance preserved. Duplicate candidates were flagged first by DOI, then by normalized title, author names, and year; potentially distinct versions of the same empirical study required additional inspection. Records were first assessed using titles and abstracts, followed by full-text eligibility checks of retained reports. A criteria-guided AI-assisted workflow recorded screening decisions, a principal exclusion reason, and supporting rationale. For full-text exclusions, one primary reason was retained per report. The protocol proposed a four-reviewer calibration pilot, independent double screening, and an inter-rater reliability assessment, but the available decision log does not demonstrate completed independent pilot ratings or a reliability statistic; those procedures are therefore not claimed as completed. Search and selection counts belong in Section~\ref{sec:results} and the PRISMA flow diagram rather than in this procedural description.
+
+\subsection{Quality Assessment}
+Study quality was appraised against eight review-specific questions: clarity of objectives (QA1), suitability of empirical methods (QA2), participant and programming-experience description (QA3), specification of the assistant and interaction (QA4), task realism (QA5), clarity of the comprehension measure (QA6), support for the conclusions from reported analysis (QA7), and discussion of limitations or threats to validity (QA8). Each item was scored Yes (1), Partially (0.5), or No (0). Not Applicable items were omitted from the maximum applicable score. The resulting percentage was defined as
+\begin{equation}
+Q=100\,\frac{\sum_{i=1}^{8}s_i}{N_{\mathrm{applicable}}}.
+\label{eq:qa_score}
+\end{equation}
+The review protocol set a study-specific threshold of $Q\geq60\%$, finalized on 18 September 2026. This custom quality appraisal is not presented as a validated risk-of-bias instrument or as a universal threshold. AI-assisted preliminary scores were entered into the quality log; independent two-reviewer confirmation and resolution of differences remain unverified at the current writing stage. The appraisal outcomes will be reported in Section~\ref{sec:results} once confirmed.
+
+\subsection{Data Extraction and Synthesis}
+A structured extraction form linked each eligible report to its study design; participant group and experience; assistant tool, model, and interaction mode; development task and codebase context; comprehension instrument; comparator; reported findings and statistics; comprehension-related challenges; limitations; and source section or page. Each field was mapped to one or more research questions. The extraction distinguishes \emph{direct} comprehension evidence (e.g., code-behavior questions or explanation accuracy) from \emph{close proxies} (e.g., cognitive load or perceived understanding); task completion speed alone is not coded as comprehension improvement. AI-assisted draft extraction entries remain subject to verification against the primary reports.
+
+The planned cross-study synthesis groups evidence by research question rather than narrating one paper at a time. For RQ1, effects will be coded with the reported comprehension measure and direction (improved, degraded, mixed, no statistically significant difference, or not directly compared), without equating non-significance with equivalence. RQ2 groups tools and support forms by reported interaction mode; RQ3 classifies measurement instruments, participant experience, study design, and codebase/task context; and RQ4 develops descriptive themes for challenges, proposed mechanisms, and consequences. Theme labels and any ambiguous or discordant coding decisions will be checked against cited evidence locations and documented before the final synthesis. A narrative/thematic synthesis is planned because outcome measures and study designs are heterogeneous; meta-analysis will be considered only if sufficiently comparable effect estimates exist.
+
+The protocol additionally specifies one round of backward and forward snowballing, citation tracking through Scopus, author-based checking, and a reference-list completeness check. These supplementary searches and the final synthesis have not yet been recorded as completed. Their outcomes will be incorporated in the final selection flow and results when available.
 
 \section{Results}\label{sec:results}
-\todo{To be written.}
+\todo{Report database retrieval counts, duplicate removal, screening and full-text eligibility in the final PRISMA flow, then present study characteristics, quality appraisal results, and RQ1--RQ4 synthesis.}
 
 \section{Discussion}\label{sec:discussion}
 \todo{To be written.}
@@ -105,21 +139,7 @@ The remainder of this paper is organized as follows. Section~\ref{sec:method} de
 \section{Conclusion}\label{sec:conclusion}
 \todo{To be written.}
 
-\begin{thebibliography}{00}
-\bibitem{xia2018} X. Xia, L. Bao, D. Lo, Z. Xing, A. E. Hassan, and S. Li, ``Measuring program comprehension: A large-scale field study with professionals,'' in \textit{Proc. 40th Int. Conf. Softw. Eng. (ICSE)}, Gothenburg, Sweden, 2018, doi: 10.1145/3180155.3182538.
-\bibitem{chen2021} M. Chen et al., ``Evaluating large language models trained on code,'' 2021, arXiv:2107.03374. [Online]. Available: https://arxiv.org/abs/2107.03374
-\bibitem{so2025} Stack Overflow, ``2025 Developer Survey: AI,'' 2025. [Online]. Available: https://survey.stackoverflow.co/2025/ai
-\bibitem{nam2024} D. Nam, A. Macvean, V. Hellendoorn, B. Vasilescu, and B. Myers, ``Using an LLM to help with code understanding,'' in \textit{Proc. IEEE/ACM 46th Int. Conf. Softw. Eng. (ICSE)}, 2024, doi: 10.1145/3597503.3639187.
-\bibitem{yan2024} L. Yan, A. Hwang, Z. Wu, and A. Head, ``Ivie: Lightweight anchored explanations of just-generated code,'' in \textit{Proc. CHI Conf. Human Factors Comput. Syst.}, 2024, doi: 10.1145/3613904.3642239.
-\bibitem{grandel2026} S. Grandel, S. T. Andersen, Y. Huang, and K. Leach, ``ComCat: Expertise-guided context generation to enhance code comprehension,'' \textit{ACM Trans. Softw. Eng. Methodol.}, 2026, doi: 10.1145/3742475.
-\bibitem{kim2026} Y. Kim, K. Jang, H. Song, M. Shin, and B. Suh, ``CodeVoyager: Integrating interactive visual aids with LLMs for code comprehension,'' in \textit{Proc. Int. Conf. Intell. User Interfaces (IUI)}, 2026, doi: 10.1145/3742413.3789057.
-\bibitem{tang2024} N. Tang et al., ``Developer behaviors in validating and repairing LLM-generated code using IDE and eye tracking,'' in \textit{Proc. IEEE Symp. Visual Lang. Human-Centric Comput. (VL/HCC)}, 2024, doi: 10.1109/VL/HCC60511.2024.00015.
-\bibitem{ferdowsi2024} K. Ferdowsi, R. Huang, M. B. James, N. Polikarpova, and S. Lerner, ``Validating AI-generated code with live programming,'' in \textit{Proc. CHI Conf. Human Factors Comput. Syst.}, 2024, doi: 10.1145/3613904.3642495.
-\bibitem{pu2025} K. Pu et al., ``Assistance or disruption? Exploring and evaluating the design and trade-offs of proactive AI programming support,'' in \textit{Proc. CHI Conf. Human Factors Comput. Syst.}, 2025, doi: 10.1145/3706598.3713357.
-\bibitem{mohamed2026} A. Mohamed, M. Assi, and M. Guizani, ``The impact of LLM-assistants on software developer productivity: A systematic review and mapping study,'' \textit{ACM Trans. Softw. Eng. Methodol.}, 2026, doi: 10.1145/3809494.
-\bibitem{qiao2026} Y. Qiao, M. I. H. Shihab, and C. Hundhausen, ``A systematic literature review of the use of GenAI assistants for code comprehension: Implications for computing education research and practice,'' \textit{ACM Trans. Comput. Educ.}, vol. 26, no. 2, 2026, doi: 10.1145/3785366.
-\bibitem{kitchenham2007} B. Kitchenham and S. Charters, ``Guidelines for performing systematic literature reviews in software engineering,'' EBSE Tech. Rep. EBSE-2007-01, 2007.
-\bibitem{page2021} M. J. Page et al., ``The PRISMA 2020 statement: An updated guideline for reporting systematic reviews,'' \textit{BMJ}, vol. 372, art. n71, 2021, doi: 10.1136/bmj.n71.
-\end{thebibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}
